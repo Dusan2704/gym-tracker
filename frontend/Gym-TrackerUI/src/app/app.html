@@ -1,0 +1,43 @@
+
+  <nav class="bg-gray-900 backdrop-blur-md border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a class="text-xl font-bold text-slate-800 text-white">Gym-Tracker</a>
+    </div>
+     <ng-container *ngIf="(isLoggedIn$ | async )">
+       <a routerLink="/dashboard" class="px-3 py-1 rounded-lg bg-gray-900 text-white hover:bg-blue-700">
+      Home
+    </a>
+      </ng-container>
+       <ng-container *ngIf="isLoggedIn$ | async">
+       <a routerLink="/stats" class="px-3 py-1 rounded-lg bg-gray-900 text-white hover:bg-blue-700">
+      Stats
+    </a>
+      </ng-container>
+
+    <div class="flex items-center gap-2">
+      <!-- Login/Register dugmad -->
+      <ng-container *ngIf="!(isLoggedIn$ | async) && !hideButtons" >
+        <button routerLink="/login"
+                class="px-4 py-2 rounded-lg font-semibold shadow bg-gray-900 hover:bg-blue-700 text-white">
+          Login
+        </button>
+
+        <button routerLink="/register"
+                class="px-4 py-2 rounded-lg font-semibold shadow bg-gray-900 hover:bg-blue-700 text-white">
+          Register
+        </button>
+      </ng-container>
+
+      <!-- Logout dugme -->
+      <ng-container *ngIf="isLoggedIn$ | async">
+        <button (click)="logout()"
+                class="px-3 py-2 rounded-md font-medium border border-gray-900 hover:bg-red-800 transition text-white">
+          Logout
+        </button>
+      </ng-container>
+  
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+

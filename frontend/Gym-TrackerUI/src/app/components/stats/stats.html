@@ -1,0 +1,54 @@
+<div class="min-h-screen relative flex items-center justify-center py-10 px-4">
+  <!-- Background image with overlay -->
+  <div class="absolute inset-0 -z-10">
+    <img src="/slika1.jpg" class="w-full h-full object-cover"/>
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  <!-- Glavni sadržaj -->
+  <div class="w-full max-w-5xl mx-auto mt-10 flex flex-col gap-6 relative z-10">
+    
+    <!-- Date range picker -->
+    <mat-form-field appearance="outline" class="w-full md:w-1/2 bg-white/80 rounded-lg">
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+        <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <!-- Dugme za generisanje -->
+    <button (click)="generateCharts()"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition">
+      Generate Charts
+    </button>
+
+    <!-- Multi-line Chart: Difficulty + Tiredness -->
+    <div class="bg-white p-4 rounded-xl shadow mt-4">
+      <h2 class="text-lg font-bold mb-2">Difficulty & Tiredness Over Time</h2>
+      <canvas baseChart [data]="difficultyTirednessChartData" [type]="'line'"></canvas>
+    </div>
+
+    <!-- Charts grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+      <!-- Difficulty -->
+      <div class="bg-white p-4 rounded-xl shadow">
+        <h2 class="text-lg font-bold mb-2">Difficulty Over Time</h2>
+        <canvas baseChart [data]="difficultyChartData" [type]="'line'"></canvas>
+      </div>
+
+      <!-- Tiredness -->
+      <div class="bg-white p-4 rounded-xl shadow">
+        <h2 class="text-lg font-bold mb-2">Tiredness Over Time</h2>
+        <canvas baseChart [data]="tirednessChartData" [type]="'line'"></canvas>
+      </div>
+
+      <!-- Calories -->
+      <div class="bg-white p-4 rounded-xl shadow md:col-span-2">
+        <h2 class="text-lg font-bold mb-2">Calories Burned Over Time</h2>
+        <canvas baseChart [data]="caloriesChartData" [type]="'bar'"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

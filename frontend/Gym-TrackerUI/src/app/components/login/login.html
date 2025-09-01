@@ -1,0 +1,44 @@
+<div class="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center" 
+     style="background-image: url('/slika1.jpg');">
+  
+  <div class="w-full max-w-md bg-white bg-opacity-90 rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h2>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      
+      <!-- Email -->
+      <div class="flex flex-col">
+        <label for="email" class="mb-1 text-gray-600 font-medium">Email</label>
+        <input type="email" id="email" placeholder="Enter your email"
+               formControlName="email"
+               class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+        <small *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+               class="text-red-500">
+          Email is required
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="flex flex-col">
+        <label for="password" class="mb-1 text-gray-600 font-medium">Password</label>
+        <input type="password" id="password" placeholder="Enter your password"
+               formControlName="password"
+               class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
+        <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+               class="text-red-500">
+          Password is required
+        </small>
+      </div>
+
+      <!-- Wrong credentials error -->
+      <small *ngIf="loginError" class="text-red-500 text-center">
+        Invalid email or password. Please try again.
+      </small>
+
+      <button type="submit" [disabled]="loginForm.invalid"
+              class="mt-4 bg-blue-600 text-white font-semibold py-2 rounded-lg shadow hover:bg-blue-700 transition transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+        Login
+      </button>
+    </form>
+  </div>
+</div>

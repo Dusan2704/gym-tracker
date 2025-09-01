@@ -1,0 +1,127 @@
+<div class="min-h-screen relative flex items-center justify-center py-10 px-4">
+  <!-- Background image with overlay -->
+  <img src="/slika1.jpg" class="absolute inset-0 w-full h-full object-cover z-0"/>
+  <div class="absolute inset-0 bg-black/20 z-0"></div> <!-- blagi tamni overlay -->
+
+  <!-- Content container -->
+  <div class="relative flex flex-col lg:flex-row justify-center items-start gap-8 w-full max-w-6xl z-10">
+    
+    <!-- Left: Add Workout Form -->
+    <div class="w-full lg:w-1/2 bg-white bg-opacity-95 rounded-2xl shadow-lg p-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Add New Workout</h2>
+
+      <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Training Date -->
+        <div>
+          <label for="trainingDate" class="block text-sm font-medium text-gray-700 mb-1">Training date</label>
+          <input id="trainingDate" formControlName="trainingDate" type="datetime-local"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <p *ngIf="workoutForm.get('trainingDate')?.invalid && workoutForm.get('trainingDate')?.touched" 
+             class="text-red-600 text-sm mt-1">Training date is required.</p>
+        </div>
+
+        <!-- Type -->
+        <div>
+          <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+          <select id="type" formControlName="type"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="" disabled selected>Select type</option>
+            <option value="yoga">Yoga</option>
+            <option value="cardio">Cardio</option>
+            <option value="strength">Strength</option>
+            <option value="hiit">HIIT</option>
+            <option value="mobility">Mobility</option>
+          </select>
+          <p *ngIf="workoutForm.get('type')?.invalid && workoutForm.get('type')?.touched" 
+             class="text-red-600 text-sm mt-1">Type is required.</p>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+          <textarea id="description" formControlName="description" rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Optional notes..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Duration -->
+          <div>
+            <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">Duration (min)</label>
+            <input id="duration" formControlName="duration" type="number" min="1" step="1"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+
+          <!-- Calories -->
+          <div>
+            <label for="caloriesBurned" class="block text-sm font-medium text-gray-700 mb-1">Calories burned</label>
+            <input id="caloriesBurned" formControlName="caloriesBurned" type="number" min="0" step="1"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Difficulty -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Difficulty: <span class="font-semibold">{{ workoutForm.get('difficulty')?.value || 1 }}</span></label>
+            <input type="range" min="1" max="10" step="1" formControlName="difficulty" class="w-full"/>
+          </div>
+
+          <!-- Tiredness -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tiredness: <span class="font-semibold">{{ workoutForm.get('tiredness')?.value || 1 }}</span></label>
+            <input type="range" min="1" max="10" step="1" formControlName="tiredness" class="w-full"/>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" (click)="resetForm()"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50">
+            Reset
+          </button>
+
+          <button type="submit" [disabled]="workoutForm.invalid"
+                  class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            Save workout
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right: Workout List -->
+    <div class="w-full lg:w-1/2">
+      <h2 class="text-2xl font-bold text-white mb-4">Your Workouts</h2>
+      
+      <ul *ngIf="workouts && workouts.length; else noWorkouts" class="space-y-3">
+        <li *ngFor="let w of workouts" class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm flex items-start justify-between gap-4">
+          <div class="flex-1 min-w-0">
+            <div class="text-sm text-gray-500">{{ w.trainingDate | date:'short' }}</div>
+            <div class="font-semibold truncate">{{ w.type }}</div>
+            <div class="text-gray-700">Duration: {{ w.duration }} min</div>
+            <div class="text-gray-700">Calories burned: {{ w.caloriesBurned }}</div>
+            <div class="text-gray-700">Difficulty: {{ w.difficulty }} | Tiredness: {{ w.tiredness }}</div>
+            <div class="text-gray-600 italic mt-1" *ngIf="w.description">{{ w.description }}</div>
+          </div>
+
+          <!-- Buttons column -->
+          <div class="flex flex-col items-center gap-2 ml-4">
+            <button (click)="editWorkout(w)"
+                    class="px-3 py-1.5 rounded-lg bg-blue-500 text-sm text-white font-medium hover:bg-blue-600 shadow-sm">
+              Edit
+            </button>
+
+            <button (click)="deleteWorkout(w.id)"
+                    class="px-3 py-1.5 rounded-lg bg-red-500 text-sm text-white font-medium hover:bg-red-600 shadow-sm">
+              Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <ng-template #noWorkouts>
+        <p class="text-gray-500">No workouts added yet.</p>
+      </ng-template>
+    </div>
+    
+  </div>
+</div>
